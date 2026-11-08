@@ -1,27 +1,24 @@
 # HCP Runtime
 
-HCP Runtime is the Node.js reference implementation of the Handle-Capability Protocol. It provides capability discovery, principal and resource grants, task execution, managed data handles, audit events, and MCP adapters.
+English · [简体中文](README.zh-CN.md)
 
-## Run locally
+HCP (Handle-Capability Protocol) is a Node.js reference runtime for tool-using agents. It lets an application grant a caller access to a specific tool and resource, check where a tool result may be sent, and trace the decision back to the task. It includes adapters for the Model Context Protocol (MCP).
 
-Use Node.js 20 or later. From this directory, list the available commands and run a local capability search.
+For example, a caller can ask HCP to read customer notes and write a redacted copy to an approved file. The read returns a **handle**, a reference to the content held by the runtime. The caller can pass that handle to the write operation without copying the original notes into a model prompt.
 
-```sh
-node src/cli.js --help
-node src/cli.js demo .
-```
+## Try the data flow example
 
-To start the MCP interface over standard input and output, run `node src/cli.js mcp stdio .` from the workspace you want to use, with the path to `cli.js` adjusted accordingly. The CLI's `conformance` and `release` commands require the full development repository.
-
-## Run the data flow example
-
-From this directory, run the example with Node.js and npm. It uses only built-in Node.js modules and creates its own temporary workspace.
+Use Node.js 20 or later with npm. The example runs locally with built-in Node.js modules and requires no API key or model connection.
 
 ```sh
+git clone https://github.com/SymbolicLight-AGI/handle-capability-protocol.git
+cd handle-capability-protocol
 npm run demo:data-pipe
 ```
 
-The example reads a sample file through a managed handle, redacts the email address and phone number, then writes the result to an authorized destination. It prints the output and audit event types, followed by `data-pipe-demo-ok`.
+The script grants `user:alex` permission to read `notes.md` and write `out/redacted.md`. It passes the read handle to `dataPipe()` and explicitly requests a summary with email addresses and phone numbers redacted. HCP checks the caller's access to the handle and the target write permission before starting the write task. [Read the example](examples/data-pipe-demo.js).
+
+Look for `[redacted:email]` and `[redacted:phone]` in the printed `written` field. The `audit_types` list includes `DATA_PIPE_SOURCE_CHECK` and `DATA_PIPE_POLICY_DECISION`. The final line is `data-pipe-demo-ok`. The script removes its temporary workspace when it finishes.
 
 ## Run the core tests
 
@@ -29,8 +26,21 @@ The example reads a sample file through a managed handle, redacts the email addr
 npm test
 ```
 
-The tests exercise grants, handle access and revocation, data transfers, and audit records for allowed and denied operations.
+The tests cover resource grants, denied operations, handle access and revocation, and audit records that link a transfer to its target task. [Core test cases](test/runtime.test.js).
 
-## Source and license
+## Use the CLI
 
-Runtime source from commit `419c858`, package version `0.3.0`. See `LICENSE` and `NOTICE.md`.
+From the repository root, list commands or search for capabilities available in the current workspace.
+
+```sh
+node src/cli.js --help
+node src/cli.js demo .
+```
+
+To expose the runtime to an MCP client over standard input and output, launch `node src/cli.js mcp stdio .` from the repository root. The final argument selects the workspace directory. The CLI's `conformance` and `release` commands require the full development repository.
+
+## Paper and license
+
+This repository contains the reference runtime, one runnable example, and the core tests accompanying [From Tool Connection to Execution Control: Benchmarking Security Invariants in MCP-Style Agent Runtimes](https://arxiv.org/abs/2606.29073).
+
+HCP Runtime v0.3.0 is licensed under the [Apache License 2.0](LICENSE). See [NOTICE.md](NOTICE.md).

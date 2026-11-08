@@ -13,6 +13,7 @@
     "examples/data-pipe-demo.js",
     "test/runtime.test.js",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE",
     "NOTICE.md"
   ],
