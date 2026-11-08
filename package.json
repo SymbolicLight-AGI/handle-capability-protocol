@@ -1,0 +1,50 @@
+{
+  "name": "hcp-runtime",
+  "version": "0.3.0",
+  "description": "HCP v0.3 reference runtime: principal/resource grants, data flow authorization, handle access policy, tasks, and audit traces.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src/",
+    "examples/data-pipe-demo.js",
+    "test/runtime.test.js",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "bin": {
+    "hcp": "./src/cli.js",
+    "hcp-runtime": "./src/cli.js"
+  },
+  "scripts": {
+    "demo": "node src/cli.js demo",
+    "demo:data-pipe": "node examples/data-pipe-demo.js",
+    "test": "node --test test/runtime.test.js"
+  },
+  "keywords": [
+    "hcp",
+    "mcp",
+    "mcp-proxy",
+    "model-context-protocol",
+    "agent-runtime",
+    "capability",
+    "handles",
+    "tasks",
+    "policy",
+    "security"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SymbolicLight-AGI/handle-capability-protocol.git",
+    "directory": "hcp-runtime"
+  },
+  "homepage": "https://github.com/SymbolicLight-AGI/handle-capability-protocol",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
